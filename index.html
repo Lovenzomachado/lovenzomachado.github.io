@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lorenzo Machado</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <header class="main-header">
+    <div class="logo">Lorenzo <span>Machado</span></div>
+    <nav class="nav-links">
+      <a href="#projects">Projects</a>
+      <a href="#knowme">Know me</a>
+      <a href="#contact">Contact</a>
+      <a href="#curriculum">Curriculum</a>
+    </nav>
+    <div class="custom-cursor"></div>
+    <script>
+      const cursor = document.querySelector(".custom-cursor");
+
+      document.addEventListener("mousemove", (e) => {
+        cursor.style.left = `${e.clientX}px`;
+        cursor.style.top = `${e.clientY}px`;
+      });
+    </script>
+  </header>
+
+  <!-- ✅ NOVA SEÇÃO ADICIONADA AQUI -->
+  <section class="intro-section">
+    <div class="intro-container">
+      <div class="intro-image">
+        <img src="https://i.imgur.com/85SnTnG.png" alt="Lorenzo Machado sorrindo" />
+      </div>
+      <div class="intro-text">
+        <h1>Lorenzo <span class="highlight-star">✦</span> is a Product Designer</h1>
+        <p>
+          UX/UI Design Intern at Dell Technologies (2022–2024), contributing to the Experience Design Group and Service Technology teams.
+          Applied Agile methodologies to global projects, collaborating with multicultural teams to deliver user-centered solutions.
+          Led research initiatives and designed interfaces for Financial Force integrations and custom Dell products.
+          Improved product usability through heuristic evaluations and strategic design principles from Unisinos and Design Academy.
+          Completed training in virtual environment security and AI concepts, enhancing collaboration and innovation across diverse environments.
+        </p>
+        <a href="#knowme" class="intro-link">Know me better</a>
+      </div>
+    </div>
+  </section>
+  <!-- ✅ FIM DA NOVA SEÇÃO -->
+
+  <section id="projects">
+    <div class="container">
+      <h2>CASE STUDIES</h2>
+      <div class="project-grid">
+        <div class="project-card">
+          <div class="project-image">
+            <img src="https://i.imgur.com/iCgshqr.jpeg" alt="KEEBS Project">
+          </div>
+          <div class="project-info">
+            <h3>KEEBS</h3>
+            <p>Crafted a sensory experience for mechanical keyboards by exploring soundscapes and tactile feedback.Created an immersive environment that transforms typing into an engaging auditory journey.</p>
+            <span>System of products and services</span>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-image">
+            <img src="https://i.imgur.com/5hGErqY.jpeg" alt="SOMETIMES Project">
+          </div>
+          <div class="project-info">
+            <h3>SOMETIMES</h3>
+            <p>Optimized user interaction on a clothing brand's website by standardizing banner and card dimensions, refining spacing and font sizing with 4px multiples, and aligning the interface with the design system for a cohesive user experience.</p>
+            <span>Design critique</span>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-image">
+            <img src="https://i.imgur.com/1FDVoDK.jpeg" alt="ALESSA Project">
+          </div>
+          <div class="project-info">
+            <h3>ALESSA</h3>
+            <p>Use of motion design to enhance the user experience on a furniture design brand's landing page.</p>
+            <p>Dynamic, yet subtle animations that guide through the layout, reflecting the brand's elegant, modern aesthetic.</p>
+            <span>Motion UI</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="container">
+      <h2>LET'S CHAT!</h2>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
