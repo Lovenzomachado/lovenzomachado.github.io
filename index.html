@@ -1,10 +1,17 @@
-<!DOCTYPE html>
+ß<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Lorenzo Machado</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+  <script>
+  window.addEventListener("scroll", function () {
+    const title = document.querySelector("#projects h2");
+    const scrollY = window.scrollY;
+    title.style.transform = `translateY(${-scrollY * 0.2}px)`; // ajuste a velocidade aqui
+  });
+</script>
 <body>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;500;600;700&display=swap" rel="stylesheet">
 
