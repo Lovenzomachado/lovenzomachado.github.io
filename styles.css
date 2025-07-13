@@ -174,18 +174,22 @@ body {
 }
 /* Seção de Projetos */
 #projects {
-    padding: 80px 0;
+    padding: 32px 0;
     background-color: #000000;
 }
 
 #projects h2 {
-    text-align: center;
+  text-align: center;
   font-size: 98px;
-  margin-bottom: 60px;
+  margin-bottom: 0px;
   letter-spacing: 2px;
   font-family: 'Cormorant', sans-serif;
   font-weight: 400;
   color: white;
+
+  /* Adicione isso para parallax suave */
+  will-change: transform;
+  transition: transform 0.1s linear;
 }
 
 #projects h3 {
