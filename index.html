@@ -1,105 +1,588 @@
-ß<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Lorenzo Machado</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Shockwave Ripple Slider | Perfect Wave Timing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'New Montreal', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f0eb;
+            overflow: hidden;
+        }
+
+        .slider {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f5f0eb;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .slider canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .slide-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            mix-blend-mode: difference;
+            color: white;
+            user-select: none;
+        }
+
+        .slide-title {
+            position: absolute;
+            left: 6%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: max-content;
+            max-width: 40%;
+        }
+
+        .slide-title h1 {
+            font-size: clamp(2.8rem, 7vw, 5.5rem);
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            color: white;
+            margin: 0;
+        }
+
+        .slide-description {
+            position: absolute;
+            right: 6%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 28%;
+            min-width: 260px;
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .slide-description p {
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: white;
+            margin: 0;
+        }
+
+        .char, .line {
+            display: inline-block;
+            will-change: transform, opacity;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .slide-title {
+                left: 50%;
+                transform: translate(-50%, -50%);
+                text-align: center;
+                width: 90%;
+                max-width: 90%;
+            }
+            .slide-description {
+                right: 50%;
+                transform: translateX(50%);
+                top: auto;
+                bottom: 12%;
+                width: 80%;
+                text-align: center;
+                min-width: auto;
+            }
+        }
+    </style>
 </head>
-  <script>
-  window.addEventListener("scroll", function () {
-    const title = document.querySelector("#projects h2");
-    const scrollY = window.scrollY;
-    title.style.transform = `translateY(${-scrollY * 0.2}px)`; // ajuste a velocidade aqui
-  });
-</script>
 <body>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;500;600;700&display=swap" rel="stylesheet">
+<div class="slider" id="slider"></div>
 
-  <header class="main-header">
-    <div class="logo">Lorenzo <span>Machado</span></div>
-    <nav class="nav-links">
-      <a href="#projects">Projects</a>
-      <a href="#knowme">Know me</a>
-      <a href="#contact">Contact</a>
-      <a href="#curriculum">Curriculum</a>
-    </nav>
-    <div class="custom-cursor"></div>
-    <script>
-      const cursor = document.querySelector(".custom-cursor");
+<script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+            "gsap": "https://unpkg.com/gsap@3.12.5/index.js"
+        }
+    }
+</script>
 
-      document.addEventListener("mousemove", (e) => {
-        cursor.style.left = `${e.clientX}px`;
-        cursor.style.top = `${e.clientY}px`;
-      });
-    </script>
-  </header>
+<script type="module">
+    import * as THREE from 'three';
+    import gsap from 'gsap';
 
-  <!-- ✅ NOVA SEÇÃO ADICIONADA AQUI -->
-  <section class="intro-section">
-    <div class="intro-container">
-      <div class="intro-image">
-        <img src="https://i.imgur.com/85SnTnG.png" alt="Lorenzo Machado sorrindo" />
-      </div>
-      <div class="intro-text">
-        <h1>Lorenzo <span class="highlight-star">✦</span> is a Product Designer</h1>
-        <p>
-          UX/UI Design Intern at Dell Technologies (2022–2024), contributing to the Experience Design Group and Service Technology teams.
-          Applied Agile methodologies to global projects, collaborating with multicultural teams to deliver user-centered solutions.
-          Led research initiatives and designed interfaces for Financial Force integrations and custom Dell products.
-          Improved product usability through heuristic evaluations and strategic design principles from Unisinos and Design Academy.
-          Completed training in virtual environment security and AI concepts, enhancing collaboration and innovation across diverse environments.
-        </p>
-        <a href="#knowme" class="intro-link">Know me better</a>
-      </div>
-    </div>
-  </section>
-  <!-- ✅ FIM DA NOVA SEÇÃO -->
+    const slidesData = [
+        {
+            title: "Blackwater '91",
+            description: "Flickering lanterns and twisted masks welcome unwanted visitors into a strange celebration beyond the forest trail.",
+            image: "https://picsum.photos/id/104/800/800"
+        },
+        {
+            title: "Neon Reverie",
+            description: "Electric dreams pulse through rain-soaked streets, where reality bends like light through water.",
+            image: "https://picsum.photos/id/106/800/800"
+        },
+        {
+            title: "Silent Echoes",
+            description: "Mountains hold secrets in their peaks, whispered only to those who dare to listen.",
+            image: "https://picsum.photos/id/124/800/800"
+        },
+        {
+            title: "Horizon Drift",
+            description: "Where the sky melts into the sea, boundaries dissolve like morning mist.",
+            image: "https://picsum.photos/id/169/800/800"
+        }
+    ];
 
-  <section id="projects">
-    <div class="container">
-      <h2>CASE STUDIES</h2>
-      <div class="project-grid">
-        <div class="project-card">
-          <div class="project-image">
-            <img src="https://i.imgur.com/iCgshqr.jpeg" alt="KEEBS Project">
-          </div>
-          <div class="project-info">
-            <h3>KEEBS</h3>
-            <p>Crafted a sensory experience for mechanical keyboards by exploring soundscapes and tactile feedback.Created an immersive environment that transforms typing into an engaging auditory journey.</p>
-            <span>System of products and services</span>
-          </div>
-        </div>
-        <div class="project-card">
-          <div class="project-image">
-            <img src="https://i.imgur.com/5hGErqY.jpeg" alt="SOMETIMES Project">
-          </div>
-          <div class="project-info">
-            <h3>SOMETIMES</h3>
-            <p>Optimized user interaction on a clothing brand's website by standardizing banner and card dimensions, refining spacing and font sizing with 4px multiples, and aligning the interface with the design system for a cohesive user experience.</p>
-            <span>Design critique</span>
-          </div>
-        </div>
-        <div class="project-card">
-          <div class="project-image">
-            <img src="https://i.imgur.com/1FDVoDK.jpeg" alt="ALESSA Project">
-          </div>
-          <div class="project-info">
-            <h3>ALESSA</h3>
-            <p>Use of motion design to enhance the user experience on a furniture design brand's landing page.</p>
-            <p>Dynamic, yet subtle animations that guide through the layout, reflecting the brand's elegant, modern aesthetic.</p>
-            <span>Motion UI</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    let currentIndex = 0;
+    let isTransitioning = false;
+    let rippleTween = null;
+    
+    let scene, camera, renderer, shaderMaterial;
+    let textures = [];
+    let uniforms;
+    
+    const sliderEl = document.getElementById('slider');
 
-  <footer id="contact">
-    <div class="container">
-      <h2>LET'S CHAT!</h2>
-    </div>
-  </footer>
+    // ========== SHADER - ONDA QUE ZERA NO FINAL ==========
+    const vertexShader = `
+        varying vec2 vUv;
+        void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+    `;
 
-  <script src="script.js"></script>
+    const fragmentShader = `
+        uniform sampler2D u_textureA;
+        uniform sampler2D u_textureB;
+        uniform float u_progress;
+        uniform vec2 u_resolution;
+        uniform float u_mobile;
+        
+        varying vec2 vUv;
+        
+        void main() {
+            vec2 res = u_resolution;
+            float aspect = res.x / res.y;
+            
+            float containerSize = u_mobile > 0.5 ? 1.0 : 0.42;
+            float containerWidth = containerSize;
+            float containerHeight = containerSize;
+            
+            float offsetX = (1.0 - containerWidth) * 0.5;
+            float offsetY = (1.0 - containerHeight) * 0.5;
+            
+            vec2 centered = vUv * 2.0 - 1.0;
+            centered.x *= aspect;
+            float radius = length(centered);
+            float maxRadius = length(vec2(aspect, 1.0));
+            float normRad = radius / maxRadius;
+            
+            float wavePos = u_progress;
+            
+            float distortion = 0.0;
+            float waveWidth = u_mobile > 0.5 ? 0.4 : 0.26;
+            float waveStart = wavePos - waveWidth;
+            float waveEnd = wavePos;
+            
+            if (normRad > waveStart && normRad < waveEnd) {
+                float t = (normRad - waveStart) / waveWidth;
+                t = 1.0 - t;
+                distortion = sin(t * 3.14159);
+                // Intensidade reduzida conforme progresso avança
+                // Quando progresso chega a 1.0, distortion vira 0
+                float intensity = 0.045 * (1.0 - wavePos * 0.7);
+                distortion = distortion * intensity;
+            }
+            
+            vec2 radialDir = normalize(centered);
+            if (radius < 0.01) radialDir = vec2(0.0);
+            
+            vec2 distortedUv = vUv + radialDir * distortion;
+            distortedUv = clamp(distortedUv, 0.001, 0.999);
+            
+            bool insideImage = (distortedUv.x >= offsetX && distortedUv.x <= offsetX + containerWidth &&
+                               distortedUv.y >= offsetY && distortedUv.y <= offsetY + containerHeight);
+            
+            if (!insideImage) {
+                gl_FragColor = vec4(0.96, 0.94, 0.92, 1.0);
+                return;
+            }
+            
+            vec2 imageUV = vec2(
+                (distortedUv.x - offsetX) / containerWidth,
+                (distortedUv.y - offsetY) / containerHeight
+            );
+            imageUV = clamp(imageUV, 0.001, 0.999);
+            
+            vec4 texA = texture2D(u_textureA, imageUV);
+            vec4 texB = texture2D(u_textureB, imageUV);
+            
+            float mixFactor = smoothstep(0.0, 1.0, u_progress);
+            vec4 color = mix(texA, texB, mixFactor);
+            
+            gl_FragColor = color;
+        }
+    `;
+
+    // ========== FUNÇÕES DE TEXTO ==========
+    function splitTextManual(element, isTitle) {
+        const text = element.innerText;
+        
+        if (isTitle) {
+            const wrapper = document.createElement('span');
+            wrapper.style.display = 'block';
+            
+            const chars = text.split('');
+            chars.forEach(char => {
+                const charSpan = document.createElement('span');
+                charSpan.className = 'char';
+                charSpan.textContent = char === ' ' ? '\u00A0' : char;
+                charSpan.style.display = 'inline-block';
+                wrapper.appendChild(charSpan);
+            });
+            
+            element.innerHTML = '';
+            element.appendChild(wrapper);
+            return Array.from(wrapper.querySelectorAll('.char'));
+        } else {
+            const wrapper = document.createElement('div');
+            wrapper.style.display = 'block';
+            
+            const lines = [text];
+            lines.forEach(line => {
+                const lineSpan = document.createElement('span');
+                lineSpan.className = 'line';
+                lineSpan.textContent = line;
+                lineSpan.style.display = 'block';
+                wrapper.appendChild(lineSpan);
+            });
+            
+            element.innerHTML = '';
+            element.appendChild(wrapper);
+            return Array.from(wrapper.querySelectorAll('.line'));
+        }
+    }
+    
+    function animateTextOut(container, onComplete) {
+        const titleH1 = container.querySelector('.slide-title h1');
+        const descP = container.querySelector('.slide-description p');
+        let completed = 0;
+        let total = 0;
+        
+        const done = () => { completed++; if (completed === total) onComplete(); };
+        
+        if (titleH1) {
+            const chars = titleH1.querySelectorAll('.char');
+            if (chars.length) {
+                total++;
+                gsap.to(chars, {
+                    y: -40,
+                    opacity: 0,
+                    stagger: 0.012,
+                    duration: 0.4,
+                    ease: "power3.in",
+                    onComplete: done
+                });
+            } else { done(); }
+        } else { done(); }
+        
+        if (descP) {
+            const lines = descP.querySelectorAll('.line');
+            if (lines.length) {
+                total++;
+                gsap.to(lines, {
+                    y: -30,
+                    opacity: 0,
+                    stagger: 0.018,
+                    duration: 0.35,
+                    ease: "power2.in",
+                    onComplete: done
+                });
+            } else { done(); }
+        }
+        
+        if (total === 0) onComplete();
+    }
+    
+    function animateTextIn(container, onComplete) {
+        container.style.opacity = '1';
+        const titleH1 = container.querySelector('.slide-title h1');
+        const descP = container.querySelector('.slide-description p');
+        let completed = 0;
+        let total = 0;
+        
+        const done = () => { completed++; if (completed === total) onComplete(); };
+        
+        if (titleH1) {
+            const chars = titleH1.querySelectorAll('.char');
+            if (chars.length) {
+                total++;
+                gsap.set(chars, { y: 50, opacity: 0 });
+                gsap.to(chars, {
+                    y: 0,
+                    opacity: 1,
+                    stagger: 0.018,
+                    duration: 0.6,
+                    ease: "back.out(0.5)",
+                    onComplete: done
+                });
+            } else { done(); }
+        } else { done(); }
+        
+        if (descP) {
+            const lines = descP.querySelectorAll('.line');
+            if (lines.length) {
+                total++;
+                gsap.set(lines, { y: 35, opacity: 0 });
+                gsap.to(lines, {
+                    y: 0,
+                    opacity: 1,
+                    stagger: 0.025,
+                    duration: 0.55,
+                    ease: "power3.out",
+                    onComplete: done
+                });
+            } else { done(); }
+        }
+        
+        if (total === 0) onComplete();
+    }
+    
+    function createSlideElement(index) {
+        const data = slidesData[index];
+        const div = document.createElement('div');
+        div.className = 'slide-content';
+        div.style.opacity = '0';
+        
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'slide-title';
+        const h1 = document.createElement('h1');
+        h1.textContent = data.title;
+        titleDiv.appendChild(h1);
+        
+        const descDiv = document.createElement('div');
+        descDiv.className = 'slide-description';
+        const p = document.createElement('p');
+        p.textContent = data.description;
+        descDiv.appendChild(p);
+        
+        div.appendChild(titleDiv);
+        div.appendChild(descDiv);
+        
+        splitTextManual(h1, true);
+        splitTextManual(p, false);
+        
+        return div;
+    }
+    
+    function getCurrentSlide() {
+        const children = sliderEl.querySelectorAll('.slide-content');
+        for (let child of children) {
+            if (child.parentNode === sliderEl && parseFloat(getComputedStyle(child).opacity) > 0.5) {
+                return child;
+            }
+        }
+        return null;
+    }
+    
+    function transitionToNext() {
+        if (isTransitioning) return;
+        isTransitioning = true;
+        
+        if (rippleTween) rippleTween.kill();
+        
+        const nextIndex = (currentIndex + 1) % slidesData.length;
+        
+        uniforms.u_textureA.value = textures[currentIndex];
+        uniforms.u_textureB.value = textures[nextIndex];
+        uniforms.u_progress.value = 0;
+        
+        const oldSlide = getCurrentSlide();
+        
+        if (oldSlide) {
+            animateTextOut(oldSlide, () => {
+                if (oldSlide && oldSlide.parentNode) oldSlide.remove();
+            });
+        }
+        
+        const newSlide = createSlideElement(nextIndex);
+        sliderEl.appendChild(newSlide);
+        
+        // ===== ANIMAÇÃO DA ONDA COM TIMING PERFEITO =====
+        // No mobile: animação única e suave
+        // No desktop: duas fases (lenta depois rápida)
+        
+        const isMobile = window.innerWidth < 768;
+        
+        if (isMobile) {
+            // Mobile: animação única suave, sem delay
+            rippleTween = gsap.to(uniforms.u_progress, {
+                value: 1.0,
+                duration: 1.8,
+                ease: "power2.out",
+                onComplete: () => {
+                    uniforms.u_textureA.value = textures[nextIndex];
+                    currentIndex = nextIndex;
+                    isTransitioning = false;
+                    rippleTween = null;
+                }
+            });
+        } else {
+            // Desktop: duas fases
+            const slowDuration = 1.2;
+            const fastDuration = 0.5;
+            
+            const firstPhase = gsap.to(uniforms.u_progress, {
+                value: 0.7,
+                duration: slowDuration,
+                ease: "power2.out",
+                paused: true
+            });
+            
+            const secondPhase = gsap.to(uniforms.u_progress, {
+                value: 1.0,
+                duration: fastDuration,
+                ease: "power1.out",
+                paused: true,
+                onComplete: () => {
+                    uniforms.u_textureA.value = textures[nextIndex];
+                    currentIndex = nextIndex;
+                    isTransitioning = false;
+                    rippleTween = null;
+                }
+            });
+            
+            firstPhase.play();
+            firstPhase.eventCallback("onComplete", () => {
+                secondPhase.play();
+            });
+            
+            rippleTween = { kill: () => {
+                firstPhase.kill();
+                secondPhase.kill();
+            }};
+        }
+        
+        const textDelay = isMobile ? 1500 : 900;
+        setTimeout(() => {
+            if (newSlide && newSlide.parentNode) {
+                animateTextIn(newSlide, () => {});
+            }
+        }, textDelay);
+    }
+    
+    function initThree() {
+        scene = new THREE.Scene();
+        camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+        camera.position.z = 1;
+        
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setClearColor(0xf5f0eb, 1.0);
+        sliderEl.prepend(renderer.domElement);
+        
+        const isMobile = window.innerWidth < 768;
+        
+        uniforms = {
+            u_textureA: { value: null },
+            u_textureB: { value: null },
+            u_progress: { value: 0 },
+            u_resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+            u_mobile: { value: isMobile ? 1.0 : 0.0 }
+        };
+        
+        shaderMaterial = new THREE.ShaderMaterial({
+            uniforms: uniforms,
+            vertexShader: vertexShader,
+            fragmentShader: fragmentShader,
+            transparent: true
+        });
+        
+        const geometry = new THREE.PlaneGeometry(2, 2);
+        const mesh = new THREE.Mesh(geometry, shaderMaterial);
+        scene.add(mesh);
+        
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight);
+            uniforms.u_mobile.value = window.innerWidth < 768 ? 1.0 : 0.0;
+        });
+    }
+    
+    async function loadTextures() {
+        const loader = new THREE.TextureLoader();
+        const promises = slidesData.map((slide, idx) => {
+            return new Promise((resolve) => {
+                loader.load(slide.image, (tex) => {
+                    tex.wrapS = THREE.ClampToEdgeWrapping;
+                    tex.wrapT = THREE.ClampToEdgeWrapping;
+                    tex.minFilter = THREE.LinearFilter;
+                    textures[idx] = tex;
+                    resolve();
+                }, undefined, () => {
+                    loader.load('https://picsum.photos/id/100/800/800', (fallback) => {
+                        textures[idx] = fallback;
+                        resolve();
+                    });
+                });
+            });
+        });
+        await Promise.all(promises);
+    }
+    
+    function startIntro() {
+        const firstSlide = createSlideElement(0);
+        sliderEl.appendChild(firstSlide);
+        
+        uniforms.u_textureA.value = textures[0];
+        uniforms.u_textureB.value = textures[0];
+        
+        animateTextIn(firstSlide, () => {});
+    }
+    
+    async function bootstrap() {
+        initThree();
+        await loadTextures();
+        startIntro();
+        
+        sliderEl.addEventListener('click', () => {
+            if (!isTransitioning) transitionToNext();
+        });
+        
+        function render() {
+            requestAnimationFrame(render);
+            if (renderer && scene && camera) {
+                renderer.render(scene, camera);
+            }
+        }
+        render();
+    }
+    
+    bootstrap();
+</script>
 </body>
 </html>
